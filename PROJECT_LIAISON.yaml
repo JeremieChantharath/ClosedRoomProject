@@ -1,0 +1,121 @@
+version: 1
+updated_at: "2025-08-28T12:00:00Z"
+
+project:
+  name: ClosedRoomProject
+  owner: JeremieChantharath
+  repos:
+    primary: "https://github.com/JeremieChantharath/ClosedRoomProject"
+  overview: |
+    Objectif: créer un jeu web simple jouable dans le navigateur, conçu pour évoluer
+    au fil de prompts fournis à différentes IA (Cursor, ChatGPT, etc.). Le jeu est
+    data-driven: un fichier JSON (`data/world.json`) décrit les pièces, personnages,
+    dialogues et actions. Les IA génèrent/éditent ce JSON et, si besoin, le moteur.
+  context:
+    inspirations:
+      - Mystère à huis clos (closed-room)
+      - Démo "Kyoto Key" (phénix doré) pour tester la boucle de jeu
+    constraints:
+      - No-build (HTML/CSS/JS vanilla) par défaut
+      - Extensible par petits incréments
+      - JSON strict conforme à `tools/CONTENT_SCHEMA.json`
+      - Lisible par humains et machines
+  stack:
+    runtime: "Browser + Vite + React"
+    editor: "Cursor (prompts-guided), autres IA autorisées"
+    languages: ["TypeScript", "JavaScript", "CSS"]
+  entrypoints:
+    game_ui: "workspace/closed-room-rpg/index.html"
+    content_json: "workspace/closed-room-rpg/public/content/world.json"
+    schema: "workspace/closed-room-rpg/tools/CONTENT_SCHEMA.json"
+    prompts: "workspace/closed-room-rpg/projetgenial/prompts.md"
+    generator_stub: "workspace/closed-room-rpg/tools/generate-content.mjs"
+
+current_state:
+  phase: "Prototype jouable"
+  playable_demo: true
+  notes: |
+    L'application active est `workspace/closed-room-rpg` (React + Vite + TypeScript + Phaser).
+    Les données sont dans `public/content/world.json` et un `public/story.json` est généré.
+    Le générateur Node (Ajv) valide le JSON contre `tools/CONTENT_SCHEMA.json`.
+
+completed_steps:
+  - date: "2025-08-28"
+    by: "ChatGPT (GPT-5)"
+    description: "Création d'un mini-moteur data-driven, schéma JSON, prompts types,
+      démo world.json, styles et page d'amorçage."
+    artifacts:
+      - webgame/index.html
+      - webgame/styles.css
+      - webgame/src/engine.js
+      - webgame/src/main.js
+      - webgame/data/world.json
+      - webgame/tools/CONTENT_SCHEMA.json
+      - webgame/tools/prompts.md
+      - webgame/tools/generate-content.mjs
+  - date: "2025-08-28"
+    by: "ChatGPT (GPT-5)"
+    description: |
+      Nettoyage du repo, suppression des doublons, migration de `projetgenial` vers
+      `workspace/closed-room-rpg`: déplacement du schéma et du générateur, déplacement
+      des données sous `public/content/`, ajout d'un script npm et génération de
+      `public/story.json` avec normalisation automatique des labels d'actions.
+    artifacts:
+      - workspace/closed-room-rpg/tools/CONTENT_SCHEMA.json
+      - workspace/closed-room-rpg/tools/generate-content.mjs
+      - workspace/closed-room-rpg/public/content/world.json
+      - workspace/closed-room-rpg/public/story.json
+      - workspace/closed-room-rpg/package.json (script generate:content)
+
+next_steps:
+  - title: "Valider le JSON à l'exécution (Ajv) dans l'app"
+    suggested_by: "ChatGPT"
+    path: "workspace/closed-room-rpg/src/engine/loader.ts"
+    details: "Charger le JSON et le valider via Ajv contre tools/CONTENT_SCHEMA.json,
+      afficher des erreurs claires en overlay si invalides."
+  - title: "Inventaire minimal"
+    details: "Étendre engine avec inventory + actions addItem/removeItem et conditions hasItem."
+  - title: "Brancher l'API LLM"
+    details: "Remplacer le stub de generate-content.mjs par un appel réel à l'API choisie."
+
+ai_collaboration_protocol:
+  purpose: |
+    Ce fichier sert de carnet de liaison inter-IA. Chaque IA lit ce fichier avant
+    d'agir, puis consigne ce qu'elle a fait dans `completed_steps` et, si pertinent,
+    met à jour `current_state` et `next_steps`.
+  rules:
+    - Lire entièrement `PROJECT_LIAISON.yaml` avant toute modification.
+    - Respecter `tools/CONTENT_SCHEMA.json` pour tout JSON produit.
+    - Éviter de casser la compatibilité: préférer des ajouts optionnels.
+    - Documenter chaque changement avec date (UTC), auteur, description claire.
+    - Ne pas stocker de secrets ici; utiliser des variables d'environnement.
+  how_to_update:
+    - Ajouter une entrée à `completed_steps` (au lieu de réécrire l'historique).
+    - Mettre `updated_at` à la date courante en UTC.
+    - Si vous introduisez de nouveaux champs, documentez-les sous `schema_notes`.
+
+schema_notes:
+  - note: "Les actions supportées: moveTo, appendDialogue, setFlag, if/then (imbriqué)."
+  - note: "Le moteur rend les NPC par room via npcIds."
+
+communication_shortcuts:
+  prompts_examples:
+    - role: "Designer"
+      goal: "Générer un monde de 3 rooms avec une mini-quête"
+      prompt_ref: "webgame/tools/prompts.md"
+    - role: "Engineer"
+      goal: "Ajouter un champ image pour les rooms et l'afficher"
+      guidance: "Modifier schema + engine + main + data/world.json de démo"
+
+commit_journal:
+  - date: "2025-08-28"
+    summary: |
+      Création du prototype web. Ajout du moteur JavaScript minimal, d’un schéma
+      JSON de contenu, de prompts types, d’une démo jouable (Kyoto Key), et d’un
+      script Node stub pour relier à un LLM. Mise en place du fichier PROJECT_LIAISON.yaml
+      comme carnet de bord inter-IA.
+    status: "Premier jalon atteint: démo fonctionnelle jouable"
+
+risks:
+  - "JSON mal formé → page vide. Mitigation: valider + message d'erreur clair."
+  - "Évolutions non rétrocompatibles du schéma. Mitigation: versionner le schéma."

@@ -1,399 +1,52 @@
 *** Begin Patch
-*** Add File: PROJECT_LIAISON.yaml
-+version: 1
-+updated_at: "2025-08-28T00:00:00Z"
-+project:
-+  name: ClosedRoomProject
-+  owner: JeremieChantharath
-+  repos:
-+    primary: "https://github.com/JeremieChantharath/ClosedRoomProject"
-+  overview: |
-+    Objectif: créer un jeu web simple jouable dans le navigateur, conçu pour évoluer
-+    au fil de prompts fournis à différentes IA (Cursor, ChatGPT, etc.). Le jeu est
-+    data‑driven: un fichier JSON (`data/world.json`) décrit les pièces, personnages,
-+    dialogues et actions. Les IA génèrent/éditent ce JSON et, si besoin, le moteur.
-+  context:
-+    inspirations:
-+      - Mystère à huis clos (closed‑room)
-+      - Démo "Kyoto Key" (phénix doré) pour tester la boucle de jeu
-+    constraints:
-+      - No‑build (HTML/CSS/JS vanilla) par défaut
-+      - Extensible par petits incréments
-+      - JSON strict conforme à `tools/CONTENT_SCHEMA.json`
-+      - Lisible par humains et machines
-+  stack:
-+    runtime: "Browser + ES Modules"
-+    editor: "Cursor (prompts-guided), autres IA autorisées"
-+    languages: ["HTML", "CSS", "JavaScript"]
-+  entrypoints:
-+    game_ui: "webgame/index.html"
-+    content_json: "webgame/data/world.json"
-+    schema: "webgame/tools/CONTENT_SCHEMA.json"
-+    prompts: "webgame/tools/prompts.md"
-+    generator_stub: "webgame/tools/generate-content.mjs"
-+
-+current_state:
-+  phase: "Prototype jouable"
-+  playable_demo: true
-+  notes: |
-+    Le starter kit web est ajouté dans `webgame/`. Un monde de démo est fourni.
-+    Un stub Node pour brancher une API LLM est présent mais non connecté.
-+
-+completed_steps:
-+  - date: "2025-08-28"
-+    by: "ChatGPT (GPT-5 Thinking)"
-+    description: "Création d'un mini-moteur data‑driven, schéma JSON, prompts types,
-+      démo world.json, styles et page d'amorçage."
-+    artifacts:
-+      - webgame/index.html
-+      - webgame/styles.css
-+      - webgame/src/engine.js
-+      - webgame/src/main.js
-+      - webgame/data/world.json
-+      - webgame/tools/CONTENT_SCHEMA.json
-+      - webgame/tools/prompts.md
-+      - webgame/tools/generate-content.mjs
++ - webgame/src/main.js
++ - webgame/data/world.json
++ - webgame/tools/CONTENT_SCHEMA.json
++ - webgame/tools/prompts.md
++ - webgame/tools/generate-content.mjs
 +
 +next_steps:
-+  - title: "Valider le JSON à l'exécution (Ajv)"
-+    suggested_by: "ChatGPT"
-+    path: "webgame/src/main.js"
-+    details: "Charger Ajv en ESM, valider world.json contre CONTENT_SCHEMA.json et
-+      afficher les erreurs lisibles pour les IA."
-+  - title: "Inventaire minimal"
-+    details: "Étendre engine avec inventory + actions addItem/removeItem et conditions hasItem."
-+  - title: "Brancher l'API LLM"
-+    details: "Remplacer le stub de generate-content.mjs par un appel réel à l'API choisie."
++ - title: "Valider le JSON à l'exécution (Ajv)"
++ suggested_by: "ChatGPT"
++ path: "webgame/src/main.js"
++ details: "Charger Ajv en ESM, valider world.json contre CONTENT_SCHEMA.json et
++ afficher les erreurs lisibles pour les IA."
++ - title: "Inventaire minimal"
++ details: "Étendre engine avec inventory + actions addItem/removeItem et conditions hasItem."
++ - title: "Brancher l'API LLM"
++ details: "Remplacer le stub de generate-content.mjs par un appel réel à l'API choisie."
 +
 +ai_collaboration_protocol:
-+  purpose: |
-+    Ce fichier sert de carnet de liaison inter‑IA. Chaque IA lit ce fichier avant
-+    d'agir, puis consigne ce qu'elle a fait dans `completed_steps` et, si pertinent,
-+    met à jour `current_state` et `next_steps`.
-+  rules:
-+    - Lire entièrement `PROJECT_LIAISON.yaml` avant toute modification.
-+    - Respecter `tools/CONTENT_SCHEMA.json` pour tout JSON produit.
-+    - Éviter de casser la compatibilité: préférer des ajouts optionnels.
-+    - Documenter chaque changement avec date (UTC), auteur, description claire.
-+    - Ne pas stocker de secrets ici; utiliser des variables d'environnement.
-+  how_to_update:
-+    - Ajouter une entrée à `completed_steps` (au lieu de réécrire l'historique).
-+    - Mettre `updated_at` à la date courante en UTC.
-+    - Si vous introduisez de nouveaux champs, documentez‑les sous `schema_notes`.
++ purpose: |
++ Ce fichier sert de carnet de liaison inter‑IA. Chaque IA lit ce fichier avant
++ d'agir, puis consigne ce qu'elle a fait dans `completed_steps` et, si pertinent,
++ met à jour `current_state` et `next_steps`.
++ rules:
++ - Lire entièrement `PROJECT_LIAISON.yaml` avant toute modification.
++ - Respecter `tools/CONTENT_SCHEMA.json` pour tout JSON produit.
++ - Éviter de casser la compatibilité: préférer des ajouts optionnels.
++ - Documenter chaque changement avec date (UTC), auteur, description claire.
++ - Ne pas stocker de secrets ici; utiliser des variables d'environnement.
++ how_to_update:
++ - Ajouter une entrée à `completed_steps` (au lieu de réécrire l'historique).
++ - Mettre `updated_at` à la date courante en UTC.
++ - Si vous introduisez de nouveaux champs, documentez‑les sous `schema_notes`.
 +
 +schema_notes:
-+  - note: "Les actions supportées: moveTo, appendDialogue, setFlag, if/then (imbriqué)."
-+  - note: "Le moteur rend les NPC par room via npcIds."
++ - note: "Les actions supportées: moveTo, appendDialogue, setFlag, if/then (imbriqué)."
++ - note: "Le moteur rend les NPC par room via npcIds."
 +
 +communication_shortcuts:
-+  prompts_examples:
-+    - role: "Designer"
-+      goal: "Générer un monde de 3 rooms avec une mini-quête"
-+      prompt_ref: "webgame/tools/prompts.md"
-+    - role: "Engineer"
-+      goal: "Ajouter un champ image pour les rooms et l'afficher"
-+      guidance: "Modifier schema + engine + main + data/world.json de démo"
++ prompts_examples:
++ - role: "Designer"
++ goal: "Générer un monde de 3 rooms avec une mini-quête"
++ prompt_ref: "webgame/tools/prompts.md"
++ - role: "Engineer"
++ goal: "Ajouter un champ image pour les rooms et l'afficher"
++ guidance: "Modifier schema + engine + main + data/world.json de démo"
 +
 +risks:
-+  - "JSON mal formé → page vide. Mitigation: valider + message d'erreur clair."
-+  - "Évolutions non rétrocompatibles du schéma. Mitigation: versionner le schéma."
-+
-*** End Patch
-
-*** Begin Patch
-*** Add File: webgame/index.html
-+<!doctype html>
-+<html lang="fr">
-+  <head>
-+    <meta charset="utf-8" />
-+    <meta name="viewport" content="width=device-width, initial-scale=1" />
-+    <title>Jeu web — Prompt‑driven</title>
-+    <link rel="stylesheet" href="styles.css" />
-+  </head>
-+  <body>
-+    <div id="app">
-+      <header>
-+        <h1 id="game-title">Jeu web — Prompt‑driven</h1>
-+        <div id="meta"></div>
-+      </header>
-+      <main>
-+        <section id="room"></section>
-+        <section id="characters"></section>
-+        <section id="dialogue"></section>
-+        <section id="actions"></section>
-+      </main>
-+      <footer>
-+        <button id="reload">Recharger le monde</button>
-+        <span id="status"></span>
-+      </footer>
-+    </div>
-+    <script type="module" src="./src/main.js"></script>
-+  </body>
-+  </html>
-+
-*** End Patch
-
-*** Begin Patch
-*** Add File: webgame/styles.css
-+:root {
-+  --bg: #0f1115;
-+  --panel: #161a22;
-+  --text: #e7eaf1;
-+  --muted: #9aa4b2;
-+  --accent: #7cc7ff;
-+}
-+* { box-sizing: border-box; }
-+body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; color: var(--text); background: var(--bg); }
-+#app { max-width: 960px; margin: 0 auto; padding: 16px; }
-+header { display:flex; align-items: baseline; gap: 12px; }
-+#meta { color: var(--muted); font-size: 14px; }
-+main { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 12px; }
-+section { background: var(--panel); border-radius: 12px; padding: 12px; box-shadow: 0 8px 24px rgba(0,0,0,.25); }
-+#room h2 { margin: 0 0 6px; }
-+#characters .npc { display:flex; align-items:center; gap:10px; padding:8px; border-radius:8px; background: rgba(255,255,255,0.02); margin-bottom:6px; }
-+#characters .npc .portrait { width:40px; height:40px; border-radius:50%; background:#2a2f3a; display:inline-flex; align-items:center; justify-content:center; font-weight:700; }
-+#dialogue .line { margin:6px 0; }
-+#actions button { margin: 6px 6px 0 0; }
-+footer { display:flex; align-items:center; justify-content: space-between; margin-top: 12px; color: var(--muted); }
-+button { background: var(--accent); color: #001018; border: none; padding: 8px 12px; border-radius: 10px; font-weight: 600; cursor: pointer; }
-+button:hover { filter: brightness(1.05); }
-+
-*** End Patch
-
-*** Begin Patch
-*** Add File: webgame/src/engine.js
-+export class GameEngine {
-+  constructor({ onRender }) {
-+    this.state = { world: null, currentRoomId: null, flags: {} };
-+    this.onRender = onRender;
-+  }
-+  async loadWorld(url = "./data/world.json") {
-+    const res = await fetch(url);
-+    if (!res.ok) throw new Error("Impossible de charger le monde: " + res.status);
-+    const world = await res.json();
-+    this.state.world = world;
-+    this.state.currentRoomId = world.startRoomId;
-+    this.state.flags = world.flags || {};
-+    this.render();
-+  }
-+  get room() { return this.state.world.rooms.find(r => r.id === this.state.currentRoomId); }
-+  get npcsInRoom() {
-+    const ids = this.room.npcIds || [];
-+    return this.state.world.npcs.filter(n => ids.includes(n.id));
-+  }
-+  perform(action) {
-+    if (action.setFlag) this.state.flags[action.setFlag.key] = action.setFlag.value;
-+    if (action.moveTo) this.state.currentRoomId = action.moveTo;
-+    if (action.appendDialogue) {
-+      const d = this.room.dialogue || [];
-+      d.push(...action.appendDialogue);
-+      this.room.dialogue = d;
-+    }
-+    if (action.if && !this.evaluateCondition(action.if)) return;
-+    if (action.then) for (const sub of action.then) this.perform(sub);
-+    this.render();
-+  }
-+  evaluateCondition(cond) {
-+    if (!cond) return true;
-+    if (cond.flagEquals) {
-+      const { key, value } = cond.flagEquals;
-+      return this.state.flags[key] === value;
-+    }
-+    return true;
-+  }
-+  render() {
-+    this.onRender({ world: this.state.world, room: this.room, npcs: this.npcsInRoom, flags: this.state.flags });
-+  }
-+}
-+
-*** End Patch
-
-*** Begin Patch
-*** Add File: webgame/src/main.js
-+import { GameEngine } from "./engine.js";
-+const $ = (sel) => document.querySelector(sel);
-+const appTitle = $("#game-title");
-+const meta = $("#meta");
-+const roomEl = $("#room");
-+const charsEl = $("#characters");
-+const dialogueEl = $("#dialogue");
-+const actionsEl = $("#actions");
-+const statusEl = $("#status");
-+const engine = new GameEngine({ onRender });
-+document.querySelector('#reload').addEventListener('click', () => engine.loadWorld().catch(handleErr));
-+engine.loadWorld().catch(handleErr);
-+function handleErr(err) { console.error(err); statusEl.textContent = "Erreur: " + err.message; }
-+function onRender({ world, room, npcs, flags }) {
-+  appTitle.textContent = world.title || 'Jeu web — Prompt‑driven';
-+  meta.textContent = world.subtitle || '';
-+  roomEl.innerHTML = `<h2>${room.title}</h2><p>${room.description}</p>`;
-+  charsEl.innerHTML = '';
-+  for (const n of npcs) {
-+    const div = document.createElement('div');
-+    div.className = 'npc';
-+    const initials = (n.name.match(/\b\p{L}/gu) || []).slice(0,2).join('').toUpperCase();
-+    div.innerHTML = `<div class="portrait">${initials}</div><div><strong>${n.name}</strong><div class="role">${n.role || ''}</div></div>`;
-+    charsEl.appendChild(div);
-+  }
-+  dialogueEl.innerHTML = '';
-+  for (const line of room.dialogue || []) {
-+    const p = document.createElement('p');
-+    p.className = 'line';
-+    p.textContent = `${line.speaker}: ${line.text}`;
-+    dialogueEl.appendChild(p);
-+  }
-+  actionsEl.innerHTML = '';
-+  for (const a of room.actions || []) {
-+    if (a.if && !engine.evaluateCondition(a.if)) continue;
-+    const btn = document.createElement('button');
-+    btn.textContent = a.label;
-+    btn.addEventListener('click', () => engine.perform(a));
-+    actionsEl.appendChild(btn);
-+  }
-+  statusEl.textContent = `Room: ${room.id} | Flags: ${JSON.stringify(flags)}`;
-+}
-+
-*** End Patch
-
-*** Begin Patch
-*** Add File: webgame/data/world.json
-+{
-+  "title": "Kyoto Key — Démo",
-+  "subtitle": "Prototype data‑driven",
-+  "startRoomId": "court",
-+  "flags": { "has_key": false },
-+  "rooms": [
-+    {
-+      "id": "court",
-+      "title": "Cour du pavillon",
-+      "description": "Une cour calme, les feuilles d'or scintillent au loin.",
-+      "npcIds": ["hugo"],
-+      "dialogue": [
-+        { "speaker": "Hugo", "text": "On parie que tu ne trouveras jamais le porte‑clé." }
-+      ],
-+      "actions": [
-+        { "label": "Entrer dans le hall", "moveTo": "hall" },
-+        { "label": "Chercher dans le gravier", "appendDialogue": [{ "speaker": "Narrateur", "text": "Juste des graviers ratis­sés avec soin." }] }
-+      ]
-+    },
-+    {
-+      "id": "hall",
-+      "title": "Hall du pavillon",
-+      "description": "Un parfum de bois laqué. Une échelle mène vers le haut.",
-+      "npcIds": ["jeremie"],
-+      "dialogue": [],
-+      "actions": [
-+        { "label": "Monter à l'étage", "moveTo": "etage" },
-+        { "label": "Soulever le tatami", "if": { "flagEquals": { "key": "has_key", "value": false } }, "then": [ { "setFlag": { "key": "has_key", "value": true } }, { "appendDialogue": [{ "speaker": "Narrateur", "text": "Vous trouvez un petit porte‑clé doré." }] } ] }
-+      ]
-+    },
-+    {
-+      "id": "etage",
-+      "title": "Étage des samouraïs",
-+      "description": "Silence solennel. Un phoenix doré veille par la fenêtre.",
-+      "npcIds": [],
-+      "dialogue": [],
-+      "actions": [
-+        { "label": "Regarder le phoenix", "appendDialogue": [{ "speaker": "Narrateur", "text": "Son bec semble creux..." }] },
-+        { "label": "Insérer le porte‑clé", "if": { "flagEquals": { "key": "has_key", "value": true } }, "then": [ { "appendDialogue": [{ "speaker": "Narrateur", "text": "Un déclic retentit dans le pavillon." }] } ] }
-+      ]
-+    }
-+  ],
-+  "npcs": [
-+    { "id": "hugo", "name": "Hugo", "role": "Provocateur" },
-+    { "id": "jeremie", "name": "Jérémie", "role": "Comparse" }
-+  ]
-+}
-+
-*** End Patch
-*** Begin Patch
-*** Add File: webgame/tools/CONTENT_SCHEMA.json
-+{
-+  "$schema": "http://json-schema.org/draft-07/schema#",
-+  "type": "object",
-+  "required": ["title", "startRoomId", "rooms", "npcs"],
-+  "properties": {
-+    "title": { "type": "string" },
-+    "subtitle": { "type": "string" },
-+    "startRoomId": { "type": "string" },
-+    "flags": { "type": "object", "additionalProperties": true },
-+    "rooms": {
-+      "type": "array",
-+      "items": {
-+        "type": "object",
-+        "required": ["id", "title", "description"],
-+        "properties": {
-+          "id": { "type": "string" },
-+          "title": { "type": "string" },
-+          "description": { "type": "string" },
-+          "npcIds": { "type": "array", "items": { "type": "string" } },
-+          "dialogue": {
-+            "type": "array",
-+            "items": {
-+              "type": "object",
-+              "required": ["speaker", "text"],
-+              "properties": {
-+                "speaker": { "type": "string" },
-+                "text": { "type": "string" }
-+              }
-+            }
-+          },
-+          "actions": {
-+            "type": "array",
-+            "items": {
-+              "type": "object",
-+              "required": ["label"],
-+              "properties": {
-+                "label": { "type": "string" },
-+                "moveTo": { "type": "string" },
-+                "appendDialogue": {
-+                  "type": "array",
-+                  "items": { "$ref": "#/properties/rooms/items/properties/dialogue/items" }
-+                },
-+                "setFlag": {
-+                  "type": "object",
-+                  "required": ["key", "value"],
-+                  "properties": {
-+                    "key": { "type": "string" },
-+                    "value": {}
-+                  }
-+                },
-+                "if": {
-+                  "type": "object",
-+                  "properties": {
-+                    "flagEquals": {
-+                      "type": "object",
-+                      "required": ["key", "value"],
-+                      "properties": {
-+                        "key": { "type": "string" },
-+                        "value": {}
-+                      }
-+                    }
-+                  }
-+                },
-+                "then": {
-+                  "type": "array",
-+                  "items": { "$ref": "#/properties/rooms/items/properties/actions/items" }
-+                }
-+              }
-+            }
-+          }
-+        }
-+      }
-+    },
-+    "npcs": {
-+      "type": "array",
-+      "items": {
-+        "type": "object",
-+        "required": ["id", "name"],
-+        "properties": {
-+          "id": { "type": "string" },
-+          "name": { "type": "string" },
-+          "role": { "type": "string" }
-+        }
-+      }
-+    }
-+  }
-+}
++ - "JSON mal formé → page vide. Mitigation: valider + message d'erreur clair."
++ - "Évolutions non rétrocompatibles du schéma. Mitigation: versionner le schéma."
 +
 *** End Patch
