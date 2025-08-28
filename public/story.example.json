@@ -1,0 +1,73 @@
+{
+  "meta": {
+    "title": "La Chambre Close - Démo",
+    "version": 1
+  },
+  "tileset": {
+    "tileSize": 24,
+    "theme": "mono",
+    "image": "/assets/livingroom-16x16.png",
+    "frameWidth": 16,
+    "frameHeight": 16,
+    "margin": 0,
+    "spacing": 0,
+    "floorFrame": 0,
+    "wallFrame": 1,
+    "symbolFrames": {
+      "D": 17,
+      "W": 18,
+      "C": 32,
+      "T": 48,
+      "V": 51,
+      "S": 49,
+      "R": 50
+    }
+  },
+  "scenes": [
+    {
+      "id": "room-101",
+      "name": "Chambre 101",
+      "width": 14,
+      "height": 10,
+      "playerStart": { "x": 6, "y": 6 },
+      "grid": [
+        "##############",
+        "#WWW......W..#",
+        "#............#",
+        "#..CCC.......#",
+        "#..C C.......#",
+        "#..CCC....TTT#",
+        "#......R..T.V#",
+        "#......R..T.V#",
+        "#......R..T.V#",
+        "##############"
+      ],
+      "objects": [
+        { "id": "o-note", "type": "note", "x": 7, "y": 2, "text": "Le salon: canapé à gauche, TV à droite, fenêtre en haut." },
+        { "id": "k-key", "type": "key", "x": 6, "y": 7, "keyId": "door-a" },
+        { "id": "d-door", "type": "door", "x": 13, "y": 5, "locked": true, "keyId": "door-a", "toScene": "room-102", "to": { "x": 1, "y": 1 } }
+      ]
+    },
+    {
+      "id": "room-102",
+      "name": "Couloir",
+      "width": 10,
+      "height": 8,
+      "playerStart": { "x": 1, "y": 1 },
+      "grid": [
+        "##########",
+        "#........#",
+        "#........#",
+        "#........#",
+        "#........#",
+        "#........#",
+        "#....E...#",
+        "##########"
+      ],
+      "objects": [
+        { "id": "exit", "type": "exit", "x": 5, "y": 6, "text": "Vous vous échappez." }
+      ]
+    }
+  ]
+}
+
