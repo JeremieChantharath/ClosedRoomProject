@@ -1,0 +1,87 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["title", "startRoomId", "rooms", "npcs"],
+  "properties": {
+    "title": { "type": "string" },
+    "subtitle": { "type": "string" },
+    "startRoomId": { "type": "string" },
+    "flags": { "type": "object", "additionalProperties": true },
+    "rooms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "description"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "npcIds": { "type": "array", "items": { "type": "string" } },
+          "dialogue": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["speaker", "text"],
+              "properties": {
+                "speaker": { "type": "string" },
+                "text": { "type": "string" }
+              }
+            }
+          },
+          "actions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["label"],
+              "properties": {
+                "label": { "type": "string" },
+                "moveTo": { "type": "string" },
+                "appendDialogue": {
+                  "type": "array",
+                  "items": { "$ref": "#/properties/rooms/items/properties/dialogue/items" }
+                },
+                "setFlag": {
+                  "type": "object",
+                  "required": ["key", "value"],
+                  "properties": {
+                    "key": { "type": "string" },
+                    "value": {}
+                  }
+                },
+                "if": {
+                  "type": "object",
+                  "properties": {
+                    "flagEquals": {
+                      "type": "object",
+                      "required": ["key", "value"],
+                      "properties": {
+                        "key": { "type": "string" },
+                        "value": {}
+                      }
+                    }
+                  }
+                },
+                "then": {
+                  "type": "array",
+                  "items": { "$ref": "#/properties/rooms/items/properties/actions/items" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "npcs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "role": { "type": "string" }
+        }
+      }
+    }
+  }
+}

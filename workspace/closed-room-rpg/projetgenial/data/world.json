@@ -1,0 +1,66 @@
+{
+  "title": "Kyoto Key — Démo",
+  "subtitle": "Prototype data‑driven",
+  "startRoomId": "court",
+  "flags": { "has_key": false },
+  "rooms": [
+    {
+      "id": "court",
+      "title": "Cour du pavillon",
+      "description": "Une cour calme, les feuilles d'or scintillent au loin.",
+      "npcIds": ["hugo"],
+      "dialogue": [
+        { "speaker": "Hugo", "text": "On parie que tu ne trouveras jamais le porte‑clé." }
+      ],
+      "actions": [
+        { "label": "Entrer dans le hall", "moveTo": "hall" },
+        {
+          "label": "Chercher dans le gravier",
+          "appendDialogue": [{ "speaker": "Narrateur", "text": "Juste des graviers ratis­sés avec soin." }]
+        }
+      ]
+    },
+    {
+      "id": "hall",
+      "title": "Hall du pavillon",
+      "description": "Un parfum de bois laqué. Une échelle mène vers le haut.",
+      "npcIds": ["jeremie"],
+      "dialogue": [],
+      "actions": [
+        { "label": "Monter à l'étage", "moveTo": "etage" },
+        {
+          "label": "Soulever le tatami",
+          "if": { "flagEquals": { "key": "has_key", "value": false } },
+          "then": [
+            { "setFlag": { "key": "has_key", "value": true } },
+            { "appendDialogue": [{ "speaker": "Narrateur", "text": "Vous trouvez un petit porte‑clé doré." }] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "etage",
+      "title": "Étage des samouraïs",
+      "description": "Silence solennel. Un phoenix doré veille par la fenêtre.",
+      "npcIds": [],
+      "dialogue": [],
+      "actions": [
+        {
+          "label": "Regarder le phoenix",
+          "appendDialogue": [{ "speaker": "Narrateur", "text": "Son bec semble creux..." }]
+        },
+        {
+          "label": "Insérer le porte‑clé",
+          "if": { "flagEquals": { "key": "has_key", "value": true } },
+          "then": [
+            { "appendDialogue": [{ "speaker": "Narrateur", "text": "Un déclic retentit dans le pavillon." }] }
+          ]
+        }
+      ]
+    }
+  ],
+  "npcs": [
+    { "id": "hugo", "name": "Hugo", "role": "Provocateur" },
+    { "id": "jeremie", "name": "Jérémie", "role": "Comparse" }
+  ]
+}
